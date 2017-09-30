@@ -9,6 +9,11 @@ import io.opsguru.ci.OGLoggingLevel
 import io.opsguru.ci.Validator
 
 class Utilities implements Serializable {
+
+    private static def AuthRealms = [
+        assembla: "Assembla Restricted Area",
+        riouxsvn: "RiouxSVN",
+    ]
     private def script = null
     private def validator = null
     public def logger = null
@@ -17,8 +22,7 @@ class Utilities implements Serializable {
         this.script = script
         this.logger = logger
         if (!logger) {
-            def level = (this.script.env.VERBOSITY ==~ /^-vv+/)?OGLoggingLevel.debug:OGLoggingLevel.info
-            this.logger = new OGLogging(script, null, level)
+            this.logger = new OGLogging(script, null, OGLoggingLevel.info)
         }
         this.validator  = new Validator(script, this.logger)
     }
@@ -26,10 +30,10 @@ class Utilities implements Serializable {
     @NonCPS
     public def resolveVar(String varName, def defaultVal='', def objList=[this.script, this.script.env, this.script.params]) {
         this.logger.debug("in Utilities.resolveVar('${varName}', '${defaultVal.toString()}', '${objList.toString()}')")
-//        logger.debug("in Utilities.resolveVar('${varName}', '${defaultVal.toString()}')")
+        logger.debug("in Utilities.resolveVar('${varName}', '${defaultVal.toString()}')")
         for (def item in objList) {
             this.logger.debug("trying to find ${varName} inside ${item.getClass()}")
-            if (validator.validateObjProperty(item, varName)) {
+            if (this.validator.validateObjProperty(item, varName)) {
                 this.logger.debug("><> ><> ><> found ${varName} inside ${item.getClass()}")
                 def result = item."${varName}"
                 this.logger.debug("got result: ${result}")
@@ -43,27 +47,6 @@ class Utilities implements Serializable {
 
     public static split_params_list(String param, String splitter=',') {
         return param.split(splitter)
-    }
-
-    public def json2map(String text) {
-        // this is standard json parsing method
-        logger.debug(["=> in json2map('", text, "')"].join(""))
-        def curr_result = script.readJSON([
-                text: text
-        ])
-        logger.debug(["8<-- result: '", curr_result.toString(), "'"].join(''))
-        return curr_result
-    }
-
-    public def map2json(def map) {
-        // this is standard json parsing method
-        // def parser = new JsonSlurper().setType(JsonParserType.INDEX_OVERLAY)
-        // def parser = new JsonSlurper().setType(JsonParserType.CHAR_BUFFER)
-        logger.debug("=> in map2json()")
-        def json_parser = new JsonOutput()
-        def result = json_parser.toJson(map)
-        logger.debug(["Result: type='", result.getClass().toString(), "', value='", result.toString(), "'"].join(""))
-        return result
     }
 
     @NonCPS
@@ -88,13 +71,11 @@ class Utilities implements Serializable {
             credentials_defaults = Defaults.CREDENTIALS_DESCRIPTIONS
         }
 
-        //echo "credentials_defaults: ${credentials_defaults}"
         def keys = credentials_defaults.keySet() as ArrayList
         for (key in keys) {
             def value = getCredsIdByDescription(credentials_defaults[key])
             result[key] = value
         }
-        //echo "result: ${result}"
         return result
     }
 
@@ -107,25 +88,6 @@ class Utilities implements Serializable {
             this.script.env."${param_name}" = value
         }
     }
-
-
-    public def get_glusterfs_server_ips_from_json(def text_data) {
-        def dataMap = this.json2map(text_data)
-        def result = []
-        logger.debug("in get_glusterfs_server_ips_from_json(${text_data})")
-        // this query is identical to jq's query:
-        // jq -r \
-        // '.Reservations[].Instances[].NetworkInterfaces[] | .PrivateIpAddress'
-        //
-        // the result is [[[ip1  as array of chars], [ip2 as array of chars], ...]]
-        // we take [0] and iterate, and then convert each char array to String.
-        def ips = dataMap.Reservations.Instances.NetworkInterfaces.PrivateIpAddress
-        for (def ip in ips[0]){
-            result << ip[0].toString()
-        }
-        return result
-    }
-
 
     def getAbsPath(def fname){
         if (fname.startsWith(File.separator)) {
@@ -329,6 +291,46 @@ class Utilities implements Serializable {
         this.script.manager.buildFailure()
     }
 
+    public def url2ServerFQDN(def server_url) {
+        def server_url_split = server_url.tokenize('://')
+        def server_name_split = server_url_split[1].tokenize('/')
+        def fqdn = server_name_split[0]
+        return fqdn
+    }
 
+    public def getAuthRealm(def server_fqdn) {
+        def server = server_fqdn.tokenize('.')[1]
+        if (server == 'assembla') {
+            return "Assembla Restricted Area"
+        }
+        if (server == 'riouxsvn') {
+            return "RiouxSVN"
+        }
+        return server
+    }
 
+    public def map2File(def fname, def data=[:], def sep=null, def quote_char=null, boolean quote=true) {
+        def file_data = ""
+        if (!sep) {
+            sep = '='
+        }
+        if (!quote_char) {
+            quote_char = '"'
+        }
+
+        for (def element in data) {
+            def key = element.key.toString()
+            def value = element.toString()
+            if (quote) {
+                value = ['', value, ''].join(quote_char)
+            }
+            file_data += [key, value].join(sep) + "\n"
+        }
+        writeFile([
+                text    : file_data,
+                encoding: 'UTF-8',
+                file    : fname
+        ])
+
+    }
 }
