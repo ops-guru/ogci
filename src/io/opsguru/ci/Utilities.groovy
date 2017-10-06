@@ -309,7 +309,12 @@ class Utilities implements Serializable {
         return server
     }
 
-    public def map2File(def fname, def data=[:], def sep=null, def quote_char=null, boolean quote=true) {
+    public def map2File(
+            def fName, 
+            def data=[:],
+            def sep=null, 
+            def quote_char=null,
+            def quote=true) {
         def file_data = ""
         if (!sep) {
             sep = '='
@@ -329,7 +334,7 @@ class Utilities implements Serializable {
         writeFile([
                 text    : file_data,
                 encoding: 'UTF-8',
-                file    : fname
+                file    : fName
         ])
 
     }
