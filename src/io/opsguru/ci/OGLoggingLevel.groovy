@@ -7,12 +7,15 @@ enum OGLoggingLevel {
     warn(0x2),
     info(0x4),
     debug(0x8),
-    trace(0x10)
+    trace(0x10),
+    stage(0x20)
 
-    private final int level;
+    private final int iLevel;
 
     OGLoggingLevel(int level) {
-        this.level = level
+        this.iLevel = level
     }
-
+    public int getValue() {
+        return this.iLevel
+    }
 }
