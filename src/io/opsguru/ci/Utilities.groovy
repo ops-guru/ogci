@@ -171,7 +171,7 @@ class Utilities implements Serializable {
         data_arr << "INSTANCE_IPS=${instance_ips.join(',')}"
         data_arr << ""
         def data = data_arr.join(System.getProperty("line.separator"))
-        writeFile([
+        this.script.writeFile([
                 file: fname,
                 text: data,
                 encoding: 'utf-8'
@@ -331,7 +331,7 @@ class Utilities implements Serializable {
             }
             file_data += [key, value].join(sep) + "\n"
         }
-        writeFile([
+        this.script.writeFile([
                 text    : file_data,
                 encoding: 'UTF-8',
                 file    : fName
