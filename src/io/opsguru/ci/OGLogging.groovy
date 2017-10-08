@@ -21,29 +21,29 @@ class OGLogging implements Serializable {
 //        if (fpath) {
 //            this.fpath = fpath
 //        }
-        if (this.logLevel.ordinal() >= OGLoggingLevel.valueOf('debug').ordinal()) {
-            this.script.echo "Current loglevel: ${this.logLevel.toString()}"
+        if (this.logLevel.ordinal() >= OGLoggingLevel.debug.ordinal()) {
+            this.script.echo "Current loglevel: ${this.logLevel}"
         }
 
     }
 
-    private def prefix(def message, String prefix='debug') {
-        def prefix_str = prefix
-        if (prefix == 'stage') {
-            prefix_str = 'info'
+    private def prefix(def message, OGLoggingLevel prefix=OGLoggingLevel.debug) {
+        def prefix_str = prefix.toString()
+        if (prefix == OGLoggingLevel.stage) {
+            prefix_str = OGLoggingLevel.info.toString()
         }
-        if (this.logLevel.ordinal() < OGLoggingLevel.valueOf(prefix_str).ordinal()) {
+        if (this.logLevel.ordinal() < prefix.ordinal()) {
             return
         }
         def chain = []
-        if (prefix == 'stage') {
+        if (prefix == OGLoggingLevel.stage) {
             chain << '#################################################\n'
             chain << "# STAGE: ${message}\n"
             chain << '#################################################\n'
         }
         else {
-            if (prefix.size() > 0) {
-                chain << prefix.toUpperCase()
+            if (prefix.toString().size() > 0) {
+                chain << prefix.toString().toUpperCase()
                 chain << ': '
             }
             if (message.size() == 0) {
@@ -59,25 +59,25 @@ class OGLogging implements Serializable {
     }
 
     public def debug(def message) {
-        prefix(message, "debug")
+        prefix(message, OGLoggingLevel.debug)
     }
 
     public def info(def message) {
-        prefix(message, "info")
+        prefix(message, OGLoggingLevel.info)
     }
     public def warn(def message) {
-        prefix(message, "warn")
+        prefix(message, OGLoggingLevel.warn)
     }
 
     public def error(def message) {
-        prefix(message, "error")
+        prefix(message, OGLoggingLevel.error)
     }
 
     public def fatal(def message) {
-        prefix(message, "fatal")
+        prefix(message, OGLoggingLevel.fatal)
     }
 
     public def stage(def message) {
-        prefix(message, "stage")
+        prefix(message, OGLoggingLevel.stage)
     }
 }
