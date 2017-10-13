@@ -5,15 +5,13 @@ import io.opsguru.ci.OGLogging
 import io.opsguru.ci.OGLoggingLevel
 import io.opsguru.ci.Utilities
 
-
 class JenkinsCredsHelper  implements Serializable {
     private def script = null
     private OGLogging  logger = null
     public Utilities utilities = null
     public String verbosity = null
 
-
-    public JenkinsSlaveHelper(def script, def logger=null) {
+    public JenkinsCredsHelper(def script, def logger=null) {
         this.script = script
         this.logger = logger
         this.verbosity = script.env.logLevel
@@ -91,7 +89,5 @@ class JenkinsCredsHelper  implements Serializable {
         //echo "result: ${result}"
         return result
     }
-
-
 
 }

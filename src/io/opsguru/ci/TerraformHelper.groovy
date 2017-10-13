@@ -16,6 +16,7 @@ class TerraformHelper implements Serializable {
         if (!logger) {
             this.logger = new OGLogging(script, null, OGLoggingLevel.info)
         }
+		this.utilities = new Utilities(script)
     }
 
 

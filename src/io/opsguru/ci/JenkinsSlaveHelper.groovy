@@ -6,6 +6,15 @@ import io.opsguru.ci.OGLoggingLevel
 import io.opsguru.ci.Utilities
 import io.opsguru.ci.JenkinsCredsHelper
 
+import jenkins.model.*
+import hudson.model.*
+import hudson.slaves.*
+import hudson.plugins.sshslaves.*
+//import hudson.slaves.EnvironmentVariablesNodeProperty.Entry;
+import hudson.tools.ToolLocationNodeProperty;
+import hudson.tools.ToolLocationNodeProperty.ToolLocation;
+import hudson.tasks.Maven.MavenInstallation
+
 class JenkinsSlaveHelper implements Serializable {
 
     private def script = null
