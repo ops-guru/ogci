@@ -23,9 +23,13 @@ class JenkinsBuildHelper implements Serializable {
         this.dry_run = this.getDryRun()
     }
 
-
-    def updateBuildColumn(String var_name, String var_value) {
-        def actionColorsArr = LABELS_DATA[var_name]
+    def updateBuildColumn(String var_name, String var_value, def labelsData = null) {
+        if (LabelsData == null) {
+            LabelsData = [
+                (var_name): "black", "lightgreen", "0px", "white",
+            ]
+        }
+        def actionColorsArr = labelsData[var_name]
         manager.addShortText(
                 var_value,
                 actionColorsArr[0],
@@ -34,7 +38,4 @@ class JenkinsBuildHelper implements Serializable {
                 actionColorsArr[3]
         )
     }
-
-
-
 }
