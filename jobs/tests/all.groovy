@@ -2,10 +2,7 @@ def repoName = 'ogci'
 def teamName = 'ops-guru'
 def gitServer = 'github.com'
 def useRepository = "https://${gitServer}/${teamName}/${repoName}"
-// ------------ Change for local Git ------------
-//def gitSshUrl = "git@${gitServer}:${teamName}/${repoName}.git"
-def gitSshUrl = "D:\\git\\ogci"
-// ----------------------------------------------
+def gitSshUrl = "git@${gitServer}:${teamName}/${repoName}.git"
 def gitCredentialsId = 'creds_ssh_ghapi'
 
 def job_parameters = []
@@ -60,8 +57,6 @@ node() {
             identifier: "${repoName}@${sha1}",
             retriever: modernSCM([
                     $class: 'GitSCMSource',
-// ------------ Change for local Git ------------
-/*					
                     credentialsId: 'creds_ssh_ghapi',
                     id: '10e1bf54-4464-4e38-82ae-5af3a65eed8a',
                     remote: gitSshUrl,
@@ -70,12 +65,6 @@ node() {
                                     $class: 'jenkins.plugins.git.traits.BranchDiscoveryTrait'
                             ]
                     ]
-*/
-					credentialsId: '',
-					id: 'ab97b430-3bb5-4b96-a4e6-5572a6ca275a',
-//					remote: 'D:\\git\\ogci'
-					remote: gitSshUrl
-// ----------------------------------------------
             ])
     ])
     stage ('Checkout') {
@@ -88,52 +77,25 @@ node() {
                 extensions: [],
                 submoduleCfg: [],
                 userRemoteConfigs: [
-// ------------ Change for local Git ------------
-/*
                         [
                                 credentialsId: gitCredentialsId,
                                 url: gitSshUrl,
                                 name: 'origin',
                                 refspec: "+refs/heads/*:refs/remotes/origin/* +refs/pull/*:refs/remotes/origin/pr/*"
                         ]
-*/
-						[url: gitSshUrl]
-// ----------------------------------------------
                 ]
         ])
     }
-// ------------- Change for windows -------------
-/*
-    def groovies = sh([
+    def testFileNamesOutput = sh([
        script: "find jobs/tests -name test*Simple.groovy",
        returnStdout: true
     ])
 
-    def grooviesArr = groovies.tokenize('\n')
-*/
-    def groovies = bat([
-       script: "dir jobs\\tests\\test*Simple.groovy /B",
-       returnStdout: true
-    ])
-//	echo "Bat result: _${groovies}_"
+    def testFileNamesArr = testFileNamesOutput.tokenize('\n')
 
-    def grooviesArr_ = groovies.tokenize('\r\n')	// WinEOL == 0D0A == '\r\n'
-//	echo "Bat tokenized: _${grooviesArr_}_"
-//	for (def sToken in grooviesArr_) {println "Token_${sToken}_"}
-
-	def j = grooviesArr_.size()
-	def grooviesArr = []
-	if (j > 0) {	// Remove List[0] = Bat command line
-		for (i = 1; i < j; i++) {
-			grooviesArr.add("jobs\\tests\\" + grooviesArr_[i])
-		}
-	}
-//			println "[_${grooviesArr_[i]}_]"
-// ----------------------------------------------
-
-    echo "Array of files: ${grooviesArr}"
+    echo "Array of files: ${testFileNamesArr}"
 	
-	for (def groovyPath in grooviesArr) {
-		load groovyPath
+	for (def testFileName in testFileNamesArr) {
+		load testFileName
 	}
 }
