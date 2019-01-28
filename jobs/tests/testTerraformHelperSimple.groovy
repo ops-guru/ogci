@@ -1,7 +1,7 @@
-//import io.opsguru.ci.OGLogging
-//import io.opsguru.ci.OGLoggingLevel
-//import io.opsguru.ci.Utilities
-import io.opsguru.ci.TerraformHelper
+//import io.opsguru.ci.utils.OGLogging
+//import io.opsguru.ci.utils.OGLoggingLevel
+//import io.opsguru.ci.utils.Utilities
+import io.opsguru.ci.terraform.TerraformHelper
 
 stage ('Test:TerraformHelper') {
 

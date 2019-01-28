@@ -1,5 +1,5 @@
-import io.opsguru.ci.OGLogging
-import io.opsguru.ci.OGLoggingLevel
+import io.opsguru.ci.utils.OGLogging
+import io.opsguru.ci.utils.OGLoggingLevel
 
 stage ('Test:OGLogging') {
 

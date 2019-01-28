@@ -1,9 +1,9 @@
-package io.opsguru.ci
+package io.opsguru.ci.jenkins
 
-import com.cloudbees.groovy.cps.*
-import io.opsguru.ci.OGLogging
-import io.opsguru.ci.OGLoggingLevel
-import io.opsguru.ci.Utilities
+
+import io.opsguru.ci.utils.OGLogging
+import io.opsguru.ci.utils.OGLoggingLevel
+import io.opsguru.ci.utils.Utilities
 
 class JenkinsBuildHelper implements Serializable {
     private def script = null

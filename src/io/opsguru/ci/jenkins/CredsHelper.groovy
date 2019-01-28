@@ -1,17 +1,17 @@
-package io.opsguru.ci
+package io.opsguru.ci.jenkins
 
 import com.cloudbees.groovy.cps.*
-import io.opsguru.ci.OGLogging
-import io.opsguru.ci.OGLoggingLevel
-import io.opsguru.ci.Utilities
+import io.opsguru.ci.utils.OGLogging
+import io.opsguru.ci.utils.OGLoggingLevel
+import io.opsguru.ci.utils.Utilities
 
-class JenkinsCredsHelper  implements Serializable {
+class CredsHelper implements Serializable {
     private def script = null
     private OGLogging  logger = null
     public Utilities utilities = null
     public String verbosity = null
 
-    public JenkinsCredsHelper(def script, def logger=null) {
+    public CredsHelper(def script, def logger=null) {
         this.script = script
         this.logger = logger
         this.verbosity = script.env.logLevel

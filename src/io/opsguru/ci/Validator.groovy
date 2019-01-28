@@ -2,10 +2,9 @@
 // vim: filetype=groovy
 package io.opsguru.ci
 
-import com.cloudbees.groovy.cps.*
-import groovy.lang.MissingPropertyException
-import io.opsguru.ci.OGLogging
-import io.opsguru.ci.OGLoggingLevel
+
+import io.opsguru.ci.utils.OGLogging
+import io.opsguru.ci.utils.OGLoggingLevel
 
 class Validator implements Serializable {
     private def script = null

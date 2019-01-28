@@ -1,30 +1,27 @@
-package io.opsguru.ci
+package io.opsguru.ci.jenkins
 
-import com.cloudbees.groovy.cps.*
-import io.opsguru.ci.OGLogging
-import io.opsguru.ci.OGLoggingLevel
-import io.opsguru.ci.Utilities
-import io.opsguru.ci.JenkinsCredsHelper
 
+import io.opsguru.ci.utils.OGLogging
+import io.opsguru.ci.utils.OGLoggingLevel
+import io.opsguru.ci.utils.Utilities
 import jenkins.model.*
 import hudson.model.*
 import hudson.slaves.*
 import hudson.plugins.sshslaves.*
 //import hudson.slaves.EnvironmentVariablesNodeProperty.Entry;
-import hudson.tools.ToolLocationNodeProperty;
-import hudson.tools.ToolLocationNodeProperty.ToolLocation;
+import hudson.tools.ToolLocationNodeProperty
 import hudson.tasks.Maven.MavenInstallation
 
-class JenkinsSlaveHelper implements Serializable {
+class SlaveHelper implements Serializable {
 
     private def script = null
     private OGLogging  logger = null
     public Utilities utilities = null
-    public JenkinsCredsHelper creds = null
+    public CredsHelper creds = null
     public String verbosity = null
 
 
-    public JenkinsSlaveHelper(def script, def logger=null) {
+    public SlaveHelper(def script, def logger=null) {
         this.script = script
         this.logger = logger
         this.verbosity = script.env.logLevel
@@ -33,7 +30,7 @@ class JenkinsSlaveHelper implements Serializable {
             this.logger = new OGLogging(script, null, level)
         }
         this.utilities = new Utilities(script, this.logger)
-        this.creds = new JenkinsCredsHelper(script, this.logger)
+        this.creds = new CredsHelper(script, this.logger)
     }
 
     private void jenkinsSlaveAddTools(DumbSlave slave, HashMap tools=[:]) {
@@ -90,7 +87,8 @@ class JenkinsSlaveHelper implements Serializable {
                         0,              // java.lang.Integer
                         0,              // java.lang.Integer
                         // TODO: see how we can verify yet not be stuck
-                        new hudson.plugins.sshslaves.verifiers.NonVerifyingKeyVerificationStrategy() // java.lang.Class
+//                        new hudson.plugins.sshslaves.verifiers.NonVerifyingKeyVerificationStrategy() // java.lang.Class
+                        new hudson.plugins.sshslaves.verifiers.NonVerifyingKeyVerificationStrategy() // java.lang.Class,
                 )
         )
         // TODO: support tools addition

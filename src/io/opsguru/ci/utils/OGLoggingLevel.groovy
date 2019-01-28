@@ -1,4 +1,4 @@
-package io.opsguru.ci
+package io.opsguru.ci.utils
 
 /* OpsGuru LoggingLevel */
 enum OGLoggingLevel {

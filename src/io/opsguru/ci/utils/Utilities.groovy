@@ -1,16 +1,16 @@
-package io.opsguru.ci
+package io.opsguru.ci.utils
 
 
-import groovy.json.*
 import com.cloudbees.groovy.cps.*
-import static java.util.UUID.randomUUID
-import io.opsguru.ci.OGLogging
-import io.opsguru.ci.OGLoggingLevel
 import io.opsguru.ci.Validator
+
+import static java.util.UUID.randomUUID
+import io.opsguru.ci.utils.OGLogging
+import io.opsguru.ci.utils.OGLoggingLevel
 
 class Utilities implements Serializable {
 
-    private static def AuthRealms = [
+    private static Map AuthRealms = [
         assembla: "Assembla Restricted Area",
         riouxsvn: "RiouxSVN",
     ]
@@ -298,15 +298,12 @@ class Utilities implements Serializable {
         return fqdn
     }
 
-    public def getAuthRealm(def server_fqdn) {
+    public String getAuthRealm(String server_fqdn) {
         def server = server_fqdn.tokenize('.')[1]
-        if (server == 'assembla') {
-            return "Assembla Restricted Area"
+        if (!(server in AuthRealms.keySet())) {
+            return server
         }
-        if (server == 'riouxsvn') {
-            return "RiouxSVN"
-        }
-        return server
+        return AuthRealms."${server}"
     }
 
     public def map2File(

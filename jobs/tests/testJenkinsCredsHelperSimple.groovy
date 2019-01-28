@@ -1,12 +1,12 @@
-//import io.opsguru.ci.OGLogging
-//import io.opsguru.ci.OGLoggingLevel
-//import io.opsguru.ci.Utilities
-import io.opsguru.ci.JenkinsCredsHelper
+//import io.opsguru.ci.utils.OGLogging
+//import io.opsguru.ci.utils.OGLoggingLevel
+//import io.opsguru.ci.utils.Utilities
+import io.opsguru.ci.jenkins.CredsHelper
 
 
-stage ('Test:JenkinsCredsHelper') {
+stage ('Test:CredsHelper') {
 
-	def JCHelper = new JenkinsCredsHelper(this)
+	def JCHelper = new CredsHelper(this)
 //	def credentials_test = [:]
 //	credentials_test << [key: "value"]
 //	result = JCHelper.genCredsMapById(credentials_test)

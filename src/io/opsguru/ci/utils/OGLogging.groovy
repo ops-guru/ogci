@@ -1,7 +1,4 @@
-package io.opsguru.ci
-
-import com.cloudbees.groovy.cps.*
-import io.opsguru.ci.OGLoggingLevel
+package io.opsguru.ci.utils
 
 class OGLogging implements Serializable {
     private def script = null

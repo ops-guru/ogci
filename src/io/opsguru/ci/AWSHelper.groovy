@@ -1,12 +1,13 @@
 package io.opsguru.ci
 
-import io.opsguru.ci.OGLogging
-import io.opsguru.ci.OGLoggingLevel
-import io.opsguru.ci.Utilities
+import io.opsguru.ci.utils.OGLogging
+import io.opsguru.ci.utils.OGLoggingLevel
+import io.opsguru.ci.utils.Utilities
+
 //import io.opsguru.ci.Runner
 
 
-class AWSHelper  implements Serializable {
+class AWSHelper implements Serializable {
     private def script = null
     private def utilities = null
 //    private def runner = null

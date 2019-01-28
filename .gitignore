@@ -3,3 +3,4 @@
 *.env.sh
 *.sublime-project              
 *.sublime-workspace
+target
