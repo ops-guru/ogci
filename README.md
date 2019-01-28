@@ -2,6 +2,11 @@
 
 Jenkins Pipeline Shared Library
 
+# Testing
+```
+mvn clean test
+```
+
 
 ## Authors
 
